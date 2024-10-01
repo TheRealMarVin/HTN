@@ -2,6 +2,9 @@ from method import Method
 from action import Action
 from typing import List, Dict, Callable
 
+from ordering_type import OrderingType
+
+
 class HTNPlanner:
     def __init__(self, verbose: bool = False):
         self.methods = []
@@ -18,11 +21,11 @@ class HTNPlanner:
         for method in self.methods:
             if method.task_name == task and method.condition(state):
                 if self.verbose:
-                    if method.ordering == "ordered":
+                    if method.ordering == OrderingType.ORDERED:
                         print(f"Decomposing task '{task}' in ordered manner using method {method.subtasks}")
-                    elif method.ordering == "unordered":
+                    elif method.ordering == OrderingType.UNORDERED:
                         print(f"Decomposing task '{task}' in unordered manner using method {method.subtasks}")
-                    elif method.ordering == "partially ordered":
+                    elif method.ordering == OrderingType.PARTIALLY_ORDERED:
                         print(f"Decomposing task '{task}' in partially ordered manner using method {method.subtasks}")
 
                 plan = []

@@ -1,5 +1,5 @@
 from method import Method
-from operator import Operator
+from action import Action
 from typing import List, Dict, Callable
 
 class HTNPlanner:
@@ -11,7 +11,7 @@ class HTNPlanner:
     def add_method(self, method: Method):
         self.methods.append(method)
 
-    def add_operator(self, operator: Operator):
+    def add_operator(self, operator: Action):
         self.operators.append(operator)
 
     def decompose(self, task: str, state: Dict[str, int]) -> List[str]:
@@ -27,7 +27,7 @@ class HTNPlanner:
 
                 plan = []
                 for subtask in method.subtasks:
-                    if isinstance(subtask, Operator):
+                    if isinstance(subtask, Action):
                         if subtask.is_applicable(state):
                             plan.append(subtask.name)
                             subtask.apply(state)

@@ -1,7 +1,7 @@
 from typing import Dict, Optional
 
 
-class Operator:
+class Action:
     def __init__(self, name: str, preconditions: Dict[str, int], effects: Dict[str, int], duration: Optional[int] = None):
         self.name = name
         self.preconditions = preconditions

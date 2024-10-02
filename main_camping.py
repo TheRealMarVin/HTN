@@ -34,9 +34,12 @@ setting_up_campsite_method = Method(
 
 starting_campfire_method = Method(
     task_name="Start Campfire",
-    subtasks=[gather_firewood, build_firepit, light_fire],
+    subtasks=[
+        ("Gather Firewood", []),
+        ("Build Firepit", ["Gather Firewood"]),
+        ("Light Fire", ["Build Firepit"])],
     condition=lambda state: state.get("fire", 0) == 0,
-    ordering=OrderingType.ORDERED.PARTIALLY_ORDERED
+    ordering=OrderingType.PARTIALLY_ORDERED
 )
 
 cooking_food_method = Method(
@@ -57,18 +60,18 @@ prepare_for_camping_method = Method(
 def main():
     htn_planner = HTNPlanner(verbose=True)
 
-    htn_planner.add_operator(pack_tent)
-    htn_planner.add_operator(pack_sleeping_bag)
-    htn_planner.add_operator(pack_food)
-    htn_planner.add_operator(pitch_tent)
-    htn_planner.add_operator(inflate_sleeping_bag)
-    htn_planner.add_operator(lay_out_ground_mat)
-    htn_planner.add_operator(gather_firewood)
-    htn_planner.add_operator(build_firepit)
-    htn_planner.add_operator(light_fire)
-    htn_planner.add_operator(prepare_ingredients)
-    htn_planner.add_operator(cook_on_fire)
-    htn_planner.add_operator(serve_food)
+    htn_planner.add_action(pack_tent)
+    htn_planner.add_action(pack_sleeping_bag)
+    htn_planner.add_action(pack_food)
+    htn_planner.add_action(pitch_tent)
+    htn_planner.add_action(inflate_sleeping_bag)
+    htn_planner.add_action(lay_out_ground_mat)
+    htn_planner.add_action(gather_firewood)
+    htn_planner.add_action(build_firepit)
+    htn_planner.add_action(light_fire)
+    htn_planner.add_action(prepare_ingredients)
+    htn_planner.add_action(cook_on_fire)
+    htn_planner.add_action(serve_food)
 
     htn_planner.add_method(packing_items_method)
     htn_planner.add_method(setting_up_campsite_method)

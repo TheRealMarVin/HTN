@@ -35,11 +35,8 @@ HTN Planner will take your high-level task ("Prepare for Camping") and decompose
 
 1. **Clone this repository**:  
    `git clone https://github.com/TheRealMarVin/HTN.git`
-2**Run the demo**:
-   - Want to see the plan? Run the HTN planner in plan mode!  
-     `python main_htn.py --mode plan`
-   - Ready for the action? Execute the plan and see the HTN planner in action!  
-     `python main_htn.py --mode execute`
+2**Run the demo**: 
+     `python main_htn.py``
 
 ## Psst... Credit Where It’s Due
 Some of this README's code and cleverness came straight from ChatGPT. It might not pitch your tent, but it sure helps polish your code!

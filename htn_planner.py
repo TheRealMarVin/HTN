@@ -1,6 +1,6 @@
 from method import Method
 from action import Action
-from typing import List, Dict, Callable
+from typing import List, Dict
 from itertools import permutations
 from ordering_type import OrderingType
 

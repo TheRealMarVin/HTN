@@ -34,10 +34,8 @@ HTN Planner will take your high-level task ("Prepare for Camping") and decompose
 ## Installation Instructions
 
 1. **Clone this repository**:  
-   `git clone https://github.com/your-repo/HTN-planner.git`
-2. **Install the requirements** (we like things simple—just Python):  
-   `pip install -r requirements.txt`
-3. **Run the demo**:
+   `git clone https://github.com/TheRealMarVin/HTN.git`
+2**Run the demo**:
    - Want to see the plan? Run the HTN planner in plan mode!  
      `python main_htn.py --mode plan`
    - Ready for the action? Execute the plan and see the HTN planner in action!  

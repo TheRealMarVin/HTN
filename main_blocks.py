@@ -124,8 +124,8 @@ def main():
     methods = {
         'ON(A, B)': [PutOnMethod('A', 'B')],
         'ON(B, C)': [PutOnMethod('B', 'C')],
-        'CLEAR(A)': [ClearAction('A', 'C')],  # Clear A from C
-        'CLEAR(B)': [ClearAction('B', 'A')],  # Example clear actions for pairs
+        'CLEAR(A)': [ClearAction('A', 'C')],
+        'CLEAR(B)': [ClearAction('B', 'A')],
         'CLEAR(C)': [ClearAction('C', 'A')]
     }
 
@@ -133,14 +133,12 @@ def main():
     critics = [ResolveConflictsCritic(), EliminateRedundantPreconditionsCritic(), UseExistingObjectsCritic()]
     planner = HTNPlanner(methods, actions, critics, block_stacking_is_goal_satisfied)
 
-    # Correct initial state
     initial_state = {
-        'CLEAR': ['B', 'C'],  # B is clear and C is clear (on A)
+        'CLEAR': ['B', 'C'],
         'ON': {'A': 'C'}  # C is on A
     }
     goals = ['ON(A, B)', 'ON(B, C)']
 
-    # Execute the plan
     plan = planner.plan(goals, initial_state)
     print_executed_actions(plan)
 

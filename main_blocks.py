@@ -4,6 +4,7 @@ from htn_planner import HTNPlanner, NodeType
 from critics import ResolveConflictsCritic, EliminateRedundantPreconditionsCritic, UseExistingObjectsCritic
 from method import Method
 from action import Action
+from ordering_type import OrderingType
 from utils import print_executed_actions
 
 

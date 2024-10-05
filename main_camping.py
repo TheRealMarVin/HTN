@@ -1,6 +1,6 @@
-# This file defines a camping example using HTN (Hierarchical Task Network) planning. 
-# The example involves tasks like packing, setting up a campsite, starting a campfire, 
-# and cooking food. Each task is decomposed into subtasks, which can be ordered, unordered, 
+# This file defines a camping example using HTN (Hierarchical Task Network) planning.
+# The example involves tasks like packing, setting up a campsite, starting a campfire,
+# and cooking food. Each task is decomposed into subtasks, which can be ordered, unordered,
 # or partially ordered, depending on the nature of the task.
 
 import argparse
@@ -69,35 +69,54 @@ prepare_for_camping_method = Method(
     ordering=OrderingType.ORDERED
 )
 
+
+def camping_is_goal_satisfied(goal, state):
+    """
+    Simple goal-checking function for camping.
+    Checks if the goal is satisfied based on the state.
+    """
+    for goal_name in goal:
+        if goal_name == "Serve Food" and state.get("served_food", 0) > 0:
+            return True
+
+    return False
+
+
 def main():
     """
-    Main function to run the camping HTN planning example. 
-    Initializes the HTN planner, adds actions and methods, and generates a plan for 'Prepare for Camping'.
+    Main function to run the camping HTN planning example.
+    Initializes the HTN planner, adds actions and methods, and generates a plan to achieve the state of 'served_food': 1.
     """
-    htn_planner = HTNPlanner(verbose=True)
+    actions = {
+        "Pack Tent": pack_tent,
+        "Pack Sleeping Bag": pack_sleeping_bag,
+        "Pack Food": pack_food,
+        "Pitch Tent": pitch_tent,
+        "Inflate Sleeping Bag": inflate_sleeping_bag,
+        "Lay Out Ground Mat": lay_out_ground_mat,
+        "Gather Firewood": gather_firewood,
+        "Build Firepit": build_firepit,
+        "Light Fire": light_fire,
+        "Prepare Ingredients": prepare_ingredients,
+        "Cook on Fire": cook_on_fire,
+        "Serve Food": serve_food
+    }
 
-    # Add actions to the planner.
-    htn_planner.add_action(pack_tent)
-    htn_planner.add_action(pack_sleeping_bag)
-    htn_planner.add_action(pack_food)
-    htn_planner.add_action(pitch_tent)
-    htn_planner.add_action(inflate_sleeping_bag)
-    htn_planner.add_action(lay_out_ground_mat)
-    htn_planner.add_action(gather_firewood)
-    htn_planner.add_action(build_firepit)
-    htn_planner.add_action(light_fire)
-    htn_planner.add_action(prepare_ingredients)
-    htn_planner.add_action(cook_on_fire)
-    htn_planner.add_action(serve_food)
+    methods = {
+        "Pack Items": packing_items_method,
+        "Set Up Campsite": setting_up_campsite_method,
+        "Start Campfire": starting_campfire_method,
+        "Cook Food": cooking_food_method,
+        "Prepare for Camping": prepare_for_camping_method
+    }
 
-    # Add methods to the planner.
-    htn_planner.add_method(packing_items_method)
-    htn_planner.add_method(setting_up_campsite_method)
-    htn_planner.add_method(starting_campfire_method)
-    htn_planner.add_method(cooking_food_method)
-    htn_planner.add_method(prepare_for_camping_method)
+    htn_planner = HTNPlanner(
+        methods=methods,
+        actions=actions,
+        critics=[],
+        is_goal_satisfied=camping_is_goal_satisfied
+    )
 
-    # Define the initial state for the planning process.
     initial_state = {
         "packed_tent": 0,
         "packed_sleeping_bag": 0,
@@ -113,10 +132,13 @@ def main():
         "served_food": 0,
     }
 
-    # Decompose the high-level task "Prepare for Camping" into a plan of actions.
-    plan = htn_planner.decompose("Prepare for Camping", initial_state)
+    goals = ["Serve Food"]
 
-    print("Generated Plan:", plan)
+    plan = htn_planner.plan(goals, initial_state)
+
+    print("Generated Plan:")
+    for step in plan:
+        print(step['action'].name)
 
 
 if __name__ == "__main__":

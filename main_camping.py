@@ -10,7 +10,6 @@ from htn_planner import HTNPlanner
 from method import Method
 from ordering_type import OrderingType
 
-# Define individual actions for the camping process.
 pack_tent = Action("Pack Tent", {}, {"packed_tent": 1}, duration=1)
 pack_sleeping_bag = Action("Pack Sleeping Bag", {}, {"packed_sleeping_bag": 1}, duration=1)
 pack_food = Action("Pack Food", {}, {"packed_food": 1}, duration=1)
@@ -24,9 +23,6 @@ prepare_ingredients = Action("Prepare Ingredients", {}, {"prepared_ingredients":
 cook_on_fire = Action("Cook on Fire", {"fire": 1, "prepared_ingredients": 1}, {"cooked_food": 1}, duration=2)
 serve_food = Action("Serve Food", {"cooked_food": 1}, {"served_food": 1}, duration=1)
 
-# Define methods for packing items, setting up a campsite, starting a campfire, and cooking food.
-
-# Method to pack items (executed in a specific order)
 packing_items_method = Method(
     task_name="Pack Items",
     subtasks=[pack_tent, pack_sleeping_bag, pack_food],
@@ -34,7 +30,6 @@ packing_items_method = Method(
     ordering=OrderingType.ORDERED
 )
 
-# Method to set up the campsite (unordered subtasks, they can happen in any order)
 setting_up_campsite_method = Method(
     task_name="Set Up Campsite",
     subtasks=[pitch_tent, inflate_sleeping_bag, lay_out_ground_mat],
@@ -42,18 +37,14 @@ setting_up_campsite_method = Method(
     ordering=OrderingType.UNORDERED
 )
 
-# Method to start a campfire (partially ordered with dependencies between subtasks)
 starting_campfire_method = Method(
     task_name="Start Campfire",
-    subtasks=[
-        ("Gather Firewood", []),
-        ("Build Firepit", ["Gather Firewood"]),
-        ("Light Fire", ["Build Firepit"])],
+    subtasks=[gather_firewood, build_firepit, light_fire],  # Subtasks as individual tasks or actions
     condition=lambda state: state.get("fire", 0) == 0,
-    ordering=OrderingType.PARTIALLY_ORDERED
+    ordering=OrderingType.PARTIALLY_ORDERED,  # Specify that the tasks are partially ordered
+    dependencies=[('Gather Firewood', 'Build Firepit'), ('Build Firepit', 'Light Fire')]  # Define dependencies
 )
 
-# Method to cook food (ordered subtasks: prepare ingredients, cook, then serve)
 cooking_food_method = Method(
     task_name="Cook Food",
     subtasks=[prepare_ingredients, cook_on_fire, serve_food],
@@ -61,7 +52,6 @@ cooking_food_method = Method(
     ordering=OrderingType.ORDERED
 )
 
-# High-level method to prepare for camping, consisting of packing, setting up the campsite, starting the fire, and cooking
 prepare_for_camping_method = Method(
     task_name="Prepare for Camping",
     subtasks=["Pack Items", "Set Up Campsite", "Start Campfire", "Cook Food"],
@@ -103,11 +93,11 @@ def main():
     }
 
     methods = {
-        "Pack Items": packing_items_method,
-        "Set Up Campsite": setting_up_campsite_method,
-        "Start Campfire": starting_campfire_method,
-        "Cook Food": cooking_food_method,
-        "Prepare for Camping": prepare_for_camping_method
+        "Pack Items": [packing_items_method],
+        "Set Up Campsite": [setting_up_campsite_method],
+        "Start Campfire": [starting_campfire_method],
+        "Cook Food": [cooking_food_method],
+        "Prepare for Camping": [prepare_for_camping_method]
     }
 
     htn_planner = HTNPlanner(
@@ -132,7 +122,7 @@ def main():
         "served_food": 0,
     }
 
-    goals = ["Serve Food"]
+    goals = ["Prepare for Camping"]
 
     plan = htn_planner.plan(goals, initial_state)
 
@@ -142,7 +132,6 @@ def main():
 
 
 if __name__ == "__main__":
-    # Argument parser for selecting the mode of operation.
     parser = argparse.ArgumentParser(description="Camping Experiment")
     args = parser.parse_args()
 

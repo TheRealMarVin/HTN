@@ -38,3 +38,5 @@ class Action:
         """
         for k, v in self.effects.items():
             state[k] = state.get(k, 0) + v
+
+        return state

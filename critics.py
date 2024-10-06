@@ -1,4 +1,6 @@
 # This file defines critic classes that analyze and modify a plan in HTN planning, resolving conflicts, eliminating redundant preconditions, and reusing existing objects.
+from htn_planner import NodeType
+
 
 class ResolveConflictsCritic:
     def analyze(self, plan):

@@ -118,16 +118,15 @@ def block_stacking_is_goal_satisfied(goals, state):
     return True
 
 
-
-
 def main():
-    methods = {
-        'ON(A, B)': [PutOnMethod('A', 'B')],
-        'ON(B, C)': [PutOnMethod('B', 'C')],
-        'CLEAR(A)': [ClearAction('A', 'C')],
-        'CLEAR(B)': [ClearAction('B', 'A')],
-        'CLEAR(C)': [ClearAction('C', 'A')]
-    }
+    blocks = ['A', 'B', 'C']
+
+    methods = {}
+    for i in range(len(blocks)):
+        for j in range(len(blocks)):
+            if i != j:
+                methods[f'ON({blocks[i]}, {blocks[j]})'] = [PutOnMethod(blocks[i], blocks[j])]
+                methods[f'CLEAR({blocks[i]})'] = [ClearAction(blocks[i], blocks[j])]
 
     actions = {}
     critics = [ResolveConflictsCritic(), EliminateRedundantPreconditionsCritic(), UseExistingObjectsCritic()]
